@@ -1,0 +1,80 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="SkyPhoto.AlbumPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit ="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
+    mc:Ignorable="d" d:DesignHeight="696" d:DesignWidth="480"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+
+        <Grid x:Name="Loading" Visibility="Collapsed" Grid.Row="1">
+            <Rectangle x:Name="ProgressRect" Fill="Transparent" /> 
+            <StackPanel VerticalAlignment="Center">
+                <toolkit:PerformanceProgressBar
+                         Name="progressBar"                         
+                         Foreground="{StaticResource PhoneAccentBrush}"
+                         IsIndeterminate="False"
+                         />
+                <TextBlock x:Name="progressBarText" Foreground="{StaticResource PhoneAccentBrush}" 
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </StackPanel>
+        </Grid>
+
+        <!--ContentPanel - place additional content here-->
+        <Grid x:Name="ContentPanel" Grid.Row="1">
+            <StackPanel>
+                <TextBlock Text="{Binding Path=LocalizedResources.Albums, Source={StaticResource LocalizedStrings}}" 
+                           Margin="0,10" FontSize="32" HorizontalAlignment="Left"  Foreground="{StaticResource PhoneAccentBrush}" />
+                <ListBox x:Name="AlbumListBox" Tap="AlbumListBox_Tap" Height="610">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <toolkit:ContextMenuService.ContextMenu>
+                                    <toolkit:ContextMenu IsZoomEnabled="True"  x:Name="menu" VerticalAlignment="Top">
+                                        <toolkit:MenuItem Header="{Binding Path=LocalizedResources.Delete, Source={StaticResource LocalizedStrings}}"
+                                                          Click="MenuDelte_Click"/>
+                                    </toolkit:ContextMenu>
+                                </toolkit:ContextMenuService.ContextMenu>
+                                <!--Replace rectangle with image-->
+                                <Image Source="{Binding AlbumPicture}" Height="100" Width="100"  Margin="12,0,9,0"/>
+                                <StackPanel Width="311">
+                                    <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+            </StackPanel>
+        </Grid>
+    </Grid>
+    
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+            <shell:ApplicationBarIconButton x:Name="album" IconUri="/icons/new_album.png" 
+                                            Text="new album"
+                                            Click="New_album_click"/>
+            <shell:ApplicationBarIconButton x:Name="refresh" IconUri="/icons/refresh.png" 
+                                            Text="refresh"
+                                            Click="Refresh_Click"/>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+
+</phone:PhoneApplicationPage>   
